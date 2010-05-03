@@ -1,0 +1,11 @@
+brause
+======
+
+a non validating EPP test client with minimal dependencies. it is
+designed to test the NZRS .nz EPP implementation but can easily be
+customised to test other EPP implementations as well or even act as a
+command line interface to EPP registries (even though performance is not
+the goal here)
+
+EPP XML templates are as templates in the template tree and can be run
+with the _brause_ commandline utility.

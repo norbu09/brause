@@ -1,0 +1,95 @@
+#!/usr/bin/perl -Ilib
+
+use common::sense;
+use Getopt::Long;
+use Pod::Usage;
+use Config::Tiny;
+use Brause;
+use Data::Dumper;
+
+#####################
+my $help;
+my $man;
+my $conf = 'etc/brause.ini';
+my $debug;
+my $data = 'command.ini';
+
+GetOptions(
+    "config|c=s"   => \$conf,
+    "datafile|d=s" => \$data,
+    "verbose|v"    => \$debug,
+    'help|?'       => \$help,
+    "man"          => \$man,
+) or pod2usage(2);
+pod2usage(1) if $help;
+pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
+
+# read the config
+my $_conf = Config::Tiny->new();
+$_conf = Config::Tiny->read( $conf );
+die Config::Tiny->errstr unless $_conf;
+$conf = $_conf->{_};
+# read in our commands
+my $_data = Config::Tiny->new();
+$_data = Config::Tiny->read($data);
+die Config::Tiny->errstr unless $_data;
+$data = $_data;
+
+my $res = Brause::talk($data, $conf);
+print Dumper($res);
+
+=head1 NAME
+
+brause - a CLI interface to EPP
+
+=head1 VERSION
+
+Version 0.01
+
+=head1 SYNOPSIS
+
+brause [options]
+
+ Options:
+   -config|c        config file
+   -datafile|d      data file
+   -help|?          brief help message
+   -verbose|v       be chatty
+   -man             full documentation
+
+ Data file:
+   [command]
+     key = value
+
+The data file holds the data for the different commands. The data file
+is a simple INI file with the command as the ini section identifier and
+then key/value pairs for the commands. The default is 'command.ini'
+
+The config file is INI style as well and configures the remote server
+(host and port) and template paths. the default is 'etc/brause.ini'
+
+=head1 AUTHOR
+
+Lenz Gschwendtner, C<< <lenz@springtimesoft.com> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<< <lenz@springtimesoft.com> >>
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc brause
+
+=head1 ACKNOWLEDGEMENTS
+
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Lenz Gschwendtner, springtimesoft LTD, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
