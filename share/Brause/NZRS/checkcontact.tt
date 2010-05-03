@@ -1,0 +1,8 @@
+<command>
+  <info>
+    <contact:info xmlns:contact="urn:ietf:params:xml:ns:contact-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:contact-1.0 contact-1.0.xsd">
+      <contact:id>[% contact %]</contact:id>
+    </contact:info>
+  </info>
+  <clTRID>[% transaction_id || 'brause' %]</clTRID>
+</command>

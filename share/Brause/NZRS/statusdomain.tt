@@ -1,0 +1,5 @@
+<info>
+  <domain:info xmlns:domain="urn:ietf:params:xml:ns:domain-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:domain-1.0 domain-1.0.xsd">
+    <domain:name hosts="all">[% domain %]</domain:name>
+  </domain:info>
+</info>

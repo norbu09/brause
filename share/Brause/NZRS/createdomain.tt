@@ -1,0 +1,18 @@
+<create>
+  <domain:create xmlns:domain="urn:ietf:params:xml:ns:domain-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:domain-1.0 domain-1.0.xsd">
+    <domain:name>[% domain %]</domain:name>
+      <domain:ns>
+        [%~ FOREACH dns in ns %]
+        <domain:hostAttr>
+          <domain:hostName>[% dns %]</domain:hostName>
+        </domain:hostAttr>
+        [%~ END %]
+      </domain:ns>
+    <domain:registrant>[% owner %]</domain:registrant>
+    <domain:contact type="admin">[% admin %]</domain:contact>
+    <domain:contact type="tech">[% tech %]</domain:contact>
+    <domain:authInfo>
+      <domain:pw></domain:pw>
+    </domain:authInfo>
+  </domain:create>
+</create>
