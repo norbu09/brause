@@ -1,5 +1,37 @@
 <update>
   <domain:update xmlns:domain="urn:ietf:params:xml:ns:domain-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:domain-1.0 domain-1.0.xsd">
-    <domain:name>$domain</domain:name>$add_frm $rem_frm $chg
+    <domain:name>[% domain %]</domain:name>
+    [%~ IF owner %] 
+    <domain:chg>
+      <domain:registrant>[% owner %]</domain:registrant>
+    </domain:chg>
+    [%~ END %]
+    [%~ IF admin %] 
+    <domain:add>
+      <domain:contact type="admin">[% admin %]</domain:registrant>
+    </domain:add>
+    <domain:rem>
+      <domain:contact type="admin">[% admin_old %]</domain:registrant>
+    </domain:rem>
+    [%~ END %]
+    [%~ IF tech %] 
+    <domain:add>
+      <domain:contact type="tech">[% tech %]</domain:registrant>
+    </domain:add>
+    <domain:rem>
+      <domain:contact type="tech">[% tech_old %]</domain:registrant>
+    </domain:rem>
+    [%~ END %]
+    [%~ IF ns %]
+    <domain:chg>
+      <domain:ns>
+        [%~ FOREACH dns in ns %]
+        <domain:hostAttr>
+          <domain:hostName>[% dns %]</domain:hostName>
+        </domain:hostAttr>
+        [%~ END %]
+      </domain:ns>
+    </domain:chg>
+    [%~ END %]
   </domain:update>
 </update>
