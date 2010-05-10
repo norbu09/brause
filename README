@@ -33,3 +33,12 @@ should be tested in the following way:
 
 This way command sequences can be tested quite easy. This should work
 for stress testing servers as well.
+
+kracherl
+========
+
+this is a very basic web client that mekes testing really straight
+forward. simply run the _kracherl_ command and fill the text boz with
+the commands you want to run then hit "run commands".
+
+the web interface will be available on http://127.0.0.1:3000
