@@ -13,7 +13,7 @@ with the _brause_ commandline utility.
 The commandline utility reads commands and options off a config file
 (standard is recipies.conf) which can be defined with the -d commandline
 switch. The config file format holds the entire command sequence that
-should betested in the following way:
+should be tested in the following way:
 
 <step>
     command = login

@@ -1,7 +1,7 @@
 use inc::Module::Install;
 
 name     'brause';
-all_from 'lib/brause.pm';
+all_from 'lib/Brause.pm';
 author   q{Lenz Gschwendtner <norbu09@cpan.org>};
 license  'perl';
 
