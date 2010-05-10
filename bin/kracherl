@@ -37,6 +37,8 @@ any '/' => sub {
     #$self->render_text($self->param('groovy'), layout => 'funky');
 } => 'index';
 
+get '/favicon.ico' => sub { shift->redirect_to('http://nzrs.net.nz/favicon.ico'); };
+
 app->start;
 __DATA__
 
