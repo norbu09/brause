@@ -8,12 +8,12 @@ license  'perl';
 build_requires 'Test::More';
 
 requires 'common::sense';
-requires 'Config::Tiny';
+requires 'Config::General';
 requires 'Getopt::Long';
 requires 'IO::Socket::SSL';
 requires 'Pod::Usage';
-requires 'Test::More';
 requires 'Template::Alloy';
+requires 'XML::Twig';
 
 auto_install;
 

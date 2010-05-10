@@ -3,7 +3,7 @@ package Brause;
 use common::sense;
 use IO::Socket::SSL qw(inet4);
 use Template::Alloy;
-use Data::Dumper;
+use XML::Twig;
 
 =head1 NAME
 
@@ -82,6 +82,8 @@ sub _send {
     my ( $data, $conf ) = @_;
 
     my $client;
+    my $t= new XML::Twig;
+
     if ( $conf->{ssl_cert} ) {
         $client = new IO::Socket::SSL(
             PeerAddr      => $conf->{host},
@@ -119,12 +121,23 @@ sub _send {
         $length -= read( $client, $read, $length );
         $greet .= $read;
     }
+
+    if($conf->{debug}){
+        print "greeting from the server:\n";
+        $t->parse($greet);
+        $t->set_pretty_print( 'indented');
+        $t->print;
+        print "----------\n";
+    }
+
     my @response;
     foreach my $req ( @{$data->{step}} ) {
         my $request = _template( $req, $conf );
         if($conf->{debug}){
             print "sending this template:\n";
-            print $request;
+            $t->parse($request);
+            $t->set_pretty_print( 'indented');
+            $t->print;
             print "----------\n";
         }
 
@@ -143,6 +156,13 @@ sub _send {
         while ( $length > 0 ) {
             $length -= read( $client, $read, $length );
             $stream .= $read;
+        }
+        if($conf->{debug}){
+            print "recieved this response:\n";
+            $t->parse($stream);
+            $t->set_pretty_print( 'indented');
+            $t->print;
+            print "----------\n";
         }
         push( @response, $stream );
     }

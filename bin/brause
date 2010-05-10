@@ -5,7 +5,6 @@ use Getopt::Long;
 use Pod::Usage;
 use Config::General;
 use Brause;
-use Data::Dumper;
 
 #####################
 my $help;
