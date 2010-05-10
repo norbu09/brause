@@ -1,8 +1,9 @@
-package brause;
+package Brause;
 
 use common::sense;
-use IO::Socket::SSL;
+use IO::Socket::SSL qw(inet4);
 use Template::Alloy;
+use Data::Dumper;
 
 =head1 NAME
 
@@ -44,9 +45,9 @@ responses are ust plain XML snippets.
 =cut
 
 sub talk {
-    my ($data, $conf) = @_;
+    my ( $data, $conf ) = @_;
 
-    my $res = _send($data, $conf);
+    my $res = _send( $data, $conf );
     return $res;
 }
 
@@ -60,12 +61,11 @@ template tree.
 =cut
 
 sub _template {
-    my ($data, $conf) = @_;
+    my ( $data, $conf ) = @_;
     $data->{command} = $data->{command} . '.tt';
-    my $t = Template::Alloy->new( INCLUDE_PATH => [$conf->{template_path}], );
+    my $t = Template::Alloy->new( INCLUDE_PATH => [ $conf->{template_path} ], );
     my $template = '';
     $t->process( 'frame.tt', $data, \$template ) || die $t->error;
-    print STDERR $template if $conf->{debug};
     return $template;
 }
 
@@ -79,52 +79,74 @@ command we ran.
 =cut
 
 sub _send {
-    my ($data, $conf) = @_;
+    my ( $data, $conf ) = @_;
 
-    my $request = _template($data, $conf);
-
-    my $client = new IO::Socket::SSL(
-        PeerAddr  => $conf->{host},
-        PeerPort  => $conf->{port},
-        LocalAddr => $conf->{myip},
-        Blocking  => 1,
-    );
-    die "Could not open socket: $@\n" unless defined $client;
+    my $client;
+    if ( $conf->{ssl_cert} ) {
+        $client = new IO::Socket::SSL(
+            PeerAddr      => $conf->{host},
+            PeerPort      => $conf->{port},
+            #LocalAddr     => $conf->{myip},
+            Blocking      => 1,
+            SSL_key_file  => $conf->{ssl_key},
+            SSL_cert_file => $conf->{ssl_cert},
+            SSL_use_cert  => 1,
+        );
+    }
+    else {
+        $client = new IO::Socket::SSL(
+            PeerAddr  => $conf->{host},
+            PeerPort  => $conf->{port},
+            #LocalAddr => $conf->{myip},
+            Blocking  => 1,
+        );
+    }
+    die "Could not open socket: " . IO::Socket::SSL::errstr() . "\n"
+      unless defined $client;
 
     my $greet;
 
     my $length = 0;
+
+    my $read;
     # read lentgh (in Bytes)
-    read( $client, $data, 4 );
-    $length = unpack( "N", $data );
+    read( $client, $read, 4 );
+    $length = unpack( "N", $read );
     $length -= 4;    # the length bit itself
 
     # read until $length bytes read
     while ( $length > 0 ) {
-        $length -= read( $client, $data, $length );
-        $greet .= $data;
+        $length -= read( $client, $read, $length );
+        $greet .= $read;
     }
-    
-#TODO make login here!
-    my $login;
+    my @response;
+    foreach my $req ( @{$data->{step}} ) {
+        my $request = _template( $req, $conf );
+        if($conf->{debug}){
+            print "sending this template:\n";
+            print $request;
+            print "----------\n";
+        }
 
-    my $req = sprintf( "%s%s", _lE2bE( length($request) + 4 ), $request );
-    print $client $req;
-    my $stream;
-    my $data;
-    my $length = 0;
+        my $req = sprintf( "%s%s", _lE2bE( length($request) + 4 ), $request );
+        print $client $req;
+        my $stream;
+        my $read;
+        my $length = 0;
 
-    # read lentgh (in Bytes)
-    read( $client, $data, 4 );
-    $length = unpack( "N", $data );
-    $length -= 4;    # the length bit itself
+        # read lentgh (in Bytes)
+        read( $client, $read, 4 );
+        $length = unpack( "N", $read );
+        $length -= 4;    # the length bit itself
 
-    # read until $length bytes read
-    while ( $length > 0 ) {
-        $length -= read( $client, $data, $length );
-        $stream .= $data;
+        # read until $length bytes read
+        while ( $length > 0 ) {
+            $length -= read( $client, $read, $length );
+            $stream .= $read;
+        }
+        push( @response, $stream );
     }
-    return { greet => $greet, login => $login, response => $stream };
+    return { greet => $greet, response => \@response };
 }
 
 =head2 _lE2bE
@@ -145,7 +167,6 @@ sub _lE2bE {
     return
       sprintf( "%c%c%c%c", $numbers[3], $numbers[2], $numbers[1], $numbers[0] );
 }
-
 
 =head1 AUTHOR
 

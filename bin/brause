@@ -3,16 +3,16 @@
 use common::sense;
 use Getopt::Long;
 use Pod::Usage;
-use Config::Tiny;
+use Config::General;
 use Brause;
 use Data::Dumper;
 
 #####################
 my $help;
 my $man;
-my $conf = 'etc/brause.ini';
+my $conf = 'etc/brause.conf';
 my $debug;
-my $data = 'command.ini';
+my $data = 'recipie.conf';
 
 GetOptions(
     "config|c=s"   => \$conf,
@@ -25,17 +25,13 @@ pod2usage(1) if $help;
 pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
 
 # read the config
-my $_conf = Config::Tiny->new();
-$_conf = Config::Tiny->read( $conf );
-die Config::Tiny->errstr unless $_conf;
-$conf = $_conf->{_};
+my $_conf = new Config::General($conf);
+my $config = $_conf->{DefaultConfig};
+$config->{debug} = 1 if $debug;
 # read in our commands
-my $_data = Config::Tiny->new();
-$_data = Config::Tiny->read($data);
-die Config::Tiny->errstr unless $_data;
-$data = $_data;
-
-my $res = Brause::talk($data, $conf);
+my $_data = new Config::General($data);
+my $recipie = $_data->{DefaultConfig};
+my $res = Brause::talk($recipie, $config);
 print Dumper($res);
 
 =head1 NAME
