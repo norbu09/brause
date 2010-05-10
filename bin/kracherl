@@ -15,13 +15,13 @@ use Brause;
 my $_conf = new Config::General("$FindBin::Bin/../etc/brause.conf");
 my $config = $_conf->{DefaultConfig};
 $config->{debug} = 1;
-# read in our commands
-my $data = new Config::General("$FindBin::Bin/../recipie.conf");
 
 any '/' => sub {
     my $self = shift;
     if($self->param('submit')){
-        my $res = Brause::talk($self->param('command'), $config);
+        my $data = new Config::General(-String => $self->param('command'));
+        my $recipie = $data->{DefaultConfig};
+        my $res = Brause::talk($recipie, $config);
         my $t= new XML::Twig;
         warn Dumper($res);
         $t->parse($res->{greet});
@@ -30,6 +30,8 @@ any '/' => sub {
         $self->stash->{command}  = $self->param('command');
         $self->stash->{result} = $res;
     } else {
+        # read in our commands
+        my $data = new Config::General("$FindBin::Bin/../recipie.conf");
         $self->stash->{command}  = $data->save_string();
         $self->stash->{result} = '';
         $self->stash->{greet} = '';
@@ -40,6 +42,7 @@ any '/' => sub {
 get '/favicon.ico' => sub { shift->redirect_to('http://nzrs.net.nz/favicon.ico'); };
 
 app->start;
+
 __DATA__
 
 @@ index.html.ep

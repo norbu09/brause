@@ -143,6 +143,7 @@ sub _send {
 
         my $req = sprintf( "%s%s", _lE2bE( length($request) + 4 ), $request );
         print $client $req;
+
         my $stream;
         my $read;
         my $length = 0;
@@ -151,6 +152,7 @@ sub _send {
         read( $client, $read, 4 );
         $length = unpack( "N", $read );
         $length -= 4;    # the length bit itself
+        print "readning $length bytes ...\n" if $conf->{debug};
 
         # read until $length bytes read
         while ( $length > 0 ) {
@@ -162,6 +164,7 @@ sub _send {
             $t->parse($stream);
             $t->set_pretty_print( 'indented');
             $t->print;
+            #print $stream;
             print "----------\n";
         }
         push( @response, $stream );
