@@ -14,6 +14,7 @@ requires 'IO::Socket::SSL';
 requires 'Pod::Usage';
 requires 'Template::Alloy';
 requires 'XML::Twig';
+requires 'Mojo';
 
 auto_install;
 

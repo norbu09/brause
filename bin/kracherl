@@ -1,0 +1,65 @@
+#!/usr/bin/env perl
+
+use common::sense;
+use Mojolicious::Lite;
+use Config::General;
+use Data::Dumper;
+use XML::Twig;
+use Brause;
+
+@ARGV = qw( daemon ) unless @ARGV;
+
+# read the config
+my $_conf = new Config::General('../etc/brause.conf');
+my $config = $_conf->{DefaultConfig};
+$config->{debug} = 1;
+# read in our commands
+my $data = new Config::General('../recipie.conf');
+
+any '/' => sub {
+    my $self = shift;
+    if($self->param('submit')){
+        my $res = Brause::talk($self->param('command'), $config);
+        my $t= new XML::Twig;
+        warn Dumper($res);
+        $t->parse($res->{greet});
+        $t->set_pretty_print( 'indented');
+        $self->stash->{greet} = $t->sprint;
+        $self->stash->{command}  = $self->param('command');
+        $self->stash->{result} = $res;
+    } else {
+        $self->stash->{command}  = $data->save_string();
+        $self->stash->{result} = '';
+        $self->stash->{greet} = '';
+    }
+    #$self->render_text($self->param('groovy'), layout => 'funky');
+} => 'index';
+
+app->start;
+__DATA__
+
+@@ index.html.ep
+<!doctype html><html>
+    <head><title>EPP test client</title></head>
+    <body>
+% if ($result) {
+    <h2>EPP greeting</h2>
+    <pre>
+<%= $greet %>
+    </pre>
+    <h2>EPP command results</h2>
+% foreach my $res (@{$result->{results}}) {
+    <pre>
+<%= $res %>
+    </pre>
+% }
+% }
+    <form method="post">
+      <textarea rows="20" cols="40" name="command">
+<%= $command %>
+      </textarea>
+      <br />
+      <input type="submit" name="submit" value="send command" />
+    </form>
+    </body>
+</html>
