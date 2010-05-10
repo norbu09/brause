@@ -5,16 +5,18 @@ use Mojolicious::Lite;
 use Config::General;
 use Data::Dumper;
 use XML::Twig;
+use FindBin;
 use Brause;
+
 
 @ARGV = qw( daemon ) unless @ARGV;
 
 # read the config
-my $_conf = new Config::General('../etc/brause.conf');
+my $_conf = new Config::General("$FindBin::Bin/../etc/brause.conf");
 my $config = $_conf->{DefaultConfig};
 $config->{debug} = 1;
 # read in our commands
-my $data = new Config::General('../recipie.conf');
+my $data = new Config::General("$FindBin::Bin/../recipie.conf");
 
 any '/' => sub {
     my $self = shift;
