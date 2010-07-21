@@ -1,5 +1,5 @@
 <update>
-  <domain:update>
+  <domain:update xmlns:domain="urn:ietf:params:xml:ns:domain-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:domain-1.0 domain-1.0.xsd">
     <domain:name>[% domain %]</domain:name>
     [%~ IF owner %] 
     <domain:chg>
