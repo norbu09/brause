@@ -1,5 +1,8 @@
 <check>
   <domain:check xmlns:domain="urn:ietf:params:xml:ns:domain-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:domain-1.0 domain-1.0.xsd">
-    <domain:name>[% domain %]</domain:name>
+        [%~ FOREACH dom in domain %]
+                <domain:name>[% dom %]</domain:name>
+        [%~ END %]
   </domain:check>
 </check>
+
