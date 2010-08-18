@@ -1,0 +1,11 @@
+<info>
+  <domain:info xmlns:domain="urn:ietf:params:xml:ns:domain-1.0"> 
+         <domain:name [% IF host %] host="all" [% END %]>[% domain %]</domain:name>
+        [% IF pass %]
+        <domain:authInfo>
+            <domain:pw>[% pass %]</domain:pw>
+        </domain:authInfo>
+        [% END %]
+ </domain:info>
+</info>
+

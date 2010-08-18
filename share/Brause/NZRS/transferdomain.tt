@@ -1,5 +1,8 @@
 <transfer op="request">
-  <domain:transfer xmlns:domain="urn:ietf:params:xml:ns:domain-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:domain-1.0 domain-1.0.xsd">
+  <domain:transfer xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
     <domain:name>[% domain %]</domain:name>
+    <domain:authInfo>
+    <domain:pw>[% udai %]</domain:pw>
+    </domain:authInfo>
   </domain:transfer>
 </transfer>

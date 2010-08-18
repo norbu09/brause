@@ -1,8 +1,6 @@
 <create>
-  <domain:create xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+  <domain:create xmlns:domain="urn:ietf:params:xml:ns:domain-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:domain-1.0 domain-1.0.xsd">
     <domain:name>[% domain %]</domain:name>
-    <domain:period unit="[% unit %]">[% number %]</domain:period>
-    [% IF ns %]
       <domain:ns>
         [%~ FOREACH dns in ns %]
         <domain:hostAttr>
@@ -10,7 +8,6 @@
         </domain:hostAttr>
         [%~ END %]
       </domain:ns>
-    [% END %]
     <domain:registrant>[% owner %]</domain:registrant>
     <domain:contact type="admin">[% admin %]</domain:contact>
     <domain:contact type="tech">[% tech %]</domain:contact>

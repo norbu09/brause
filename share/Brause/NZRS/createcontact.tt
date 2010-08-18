@@ -1,26 +1,32 @@
 <create>
-  <contact:create xmlns:contact="urn:ietf:params:xml:ns:contact-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:contact-1.0 contact-1.0.xsd">
-    <contact:id>auto</contact:id>
-    <contact:postalInfo type="int">
+  <contact:create xmlns:contact="urn:ietf:params:xml:ns:contact-1.0">
+    <contact:id>[% contact %]</contact:id>
+    <contact:postalInfo type="int" >
       <contact:name>[% name %]</contact:name>
-      <contact:org>[% company %]</contact:org>
+     [% IF org %]
+      <contact:org>[% org %]</contact:org>
+    [% END %]  
       <contact:addr>
-        <contact:street>[% street %]</contact:street>
+        [%~ FOREACH str in street %] 
+        <contact:street>[% str %]</contact:street>
+        [%~ END %]
         <contact:city>[% city %]</contact:city>
-        <contact:sp>[% state %]</contact:sp>
+       [% IF state %] 
+        <contact:sp>[% state %]</contact:sp>                                                                                                                                                                     
+       [% END %]
+       [% IF pcode %]
         <contact:pc>[% pcode %]</contact:pc>
+       [% END %] 
         <contact:cc>[% ccode %]</contact:cc>
       </contact:addr>
     </contact:postalInfo>
     <contact:voice>[% phone %]</contact:voice>
+    [% IF fax %]
     <contact:fax>[% fax %]</contact:fax>
+    [% END %]
     <contact:email>[% email %]</contact:email>
     <contact:authInfo>
       <contact:pw></contact:pw>
     </contact:authInfo>
-    <contact:disclose flag="0">
-      <contact:voice/>
-      <contact:email/>
-    </contact:disclose>
   </contact:create>
 </create>
