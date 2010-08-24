@@ -32,7 +32,7 @@ if(!($sock = IO::Socket::SSL->new( PeerAddr => $host,
                    PeerPort => $port,
                    Proto    => 'tcp',
                    SSL_use_cert => 1,
-                   SSL_verify_mode => 0x02,
+                   #SSL_verify_mode => 0x02,
                  ))) {
     warn "unable to create socket: ", &IO::Socket::SSL::errstr, "\n";
     exit(0);
