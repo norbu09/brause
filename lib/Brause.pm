@@ -84,16 +84,20 @@ sub _send {
     my $client;
     my $t= new XML::Twig;
 
+    $IO::Socket::SSL::DEBUG = 3 if $conf->{debug};
+
     if ( $conf->{ssl_cert} ) {
         $client = new IO::Socket::SSL(
             PeerAddr      => $conf->{host},
             PeerPort      => $conf->{port},
             #LocalAddr     => $conf->{myip},
             Blocking      => 1,
+            #SSL_verify_mode => 0x01,
+            SSL_use_cert  => 1,
             SSL_key_file  => $conf->{ssl_key},
             SSL_cert_file => $conf->{ssl_cert},
-            SSL_use_cert  => 1,
         );
+        sleep 1;
     }
     else {
         $client = new IO::Socket::SSL(
