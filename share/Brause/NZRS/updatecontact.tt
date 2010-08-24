@@ -1,9 +1,12 @@
-<create>
-  <contact:create xmlns:contact="urn:ietf:params:xml:ns:contact-1.0">
+<update>
+  <contact:update xmlns:contact="urn:ietf:params:xml:ns:contact-1.0">
     <contact:id>[% contact %]</contact:id>
+    <contact:chg>
     <contact:postalInfo type="int" >
+      [% IF name %]
       <contact:name>[% name %]</contact:name>
-       [% IF org %] 
+      [% END %]
+      [% IF org %] 
       <contact:org>[% org %]</contact:org>
       [% END %]
       <contact:addr>
@@ -20,13 +23,16 @@
         <contact:cc>[% ccode %]</contact:cc>
       </contact:addr>
     </contact:postalInfo>
+    [% IF email %]
     <contact:email>[% email %]</contact:email> 
-    <contact:voice>[% phone %]</contact:voice>
-    [% IF fax %]
-    <contact:fax>[% fax %]</contact:fax>
     [% END %]
+    [% IF phone %]
+    <contact:voice>[% phone %]</contact:voice>
+    [% END %]
+    <contact:fax/>
     <contact:authInfo>
       <contact:pw></contact:pw>
     </contact:authInfo>
-  </contact:create>
-</create>
+   </contact:chg>
+  </contact:update>
+</update>

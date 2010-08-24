@@ -6,14 +6,24 @@
       <domain:ns>
         [%~ FOREACH dns in ns %]
         <domain:hostAttr>
-          <domain:hostName>[% dns %]</domain:hostName>
+            <domain:hostName>[% dns %]</domain:hostName>
+            [% IF ipv4 %]
+            <domain:hostAddr ip="v4">[% ipv4 %]</domain:hostAddr>
+            [% END %]
+            [% IF ipv6 %]
+            <domain:hostAddr ip="v6">[% ipv6 %]</domain:hostAddr>
+            [% END  %]
         </domain:hostAttr>
-        [%~ END %]
+       [%~ END %]
       </domain:ns>
     [% END %]
     <domain:registrant>[% owner %]</domain:registrant>
+    [% IF admin %]
     <domain:contact type="admin">[% admin %]</domain:contact>
+    [% END %]
+    [% IF tech %]
     <domain:contact type="tech">[% tech %]</domain:contact>
+    [% END %]
     <domain:authInfo>
       <domain:pw></domain:pw>
     </domain:authInfo>

@@ -156,7 +156,7 @@ sub _send {
         read( $client, $read, 4 );
         $length = unpack( "N", $read );
         $length -= 4;    # the length bit itself
-        print "readning $length bytes ...\n" if $conf->{debug};
+        print "reading $length bytes ...\n" if $conf->{debug};
 
         # read until $length bytes read
         while ( $length > 0 ) {
@@ -164,7 +164,7 @@ sub _send {
             $stream .= $read;
         }
         if($conf->{debug}){
-            print "recieved this response:\n";
+            print "received this response:\n";
             $t->parse($stream);
             $t->set_pretty_print( 'indented');
             $t->print;
