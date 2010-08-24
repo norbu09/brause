@@ -10,6 +10,10 @@
 use strict;
 use IO::Socket::SSL qw(inet4);
 
+######### config ################
+my $host = 'srsqwho1.srs.net.nz';
+my $port = 700;
+#################################
 my ($v_mode, $sock, $buf);
 
 if($ARGV[0] eq "DEBUG") { $IO::Socket::SSL::DEBUG = 3; }
@@ -24,8 +28,8 @@ unless (-d "certs") {
     }
 }
 
-if(!($sock = IO::Socket::SSL->new( PeerAddr => 'srsqwho1.srs.net.nz',
-                   PeerPort => '700',
+if(!($sock = IO::Socket::SSL->new( PeerAddr => $host,
+                   PeerPort => $port,
                    Proto    => 'tcp',
                    SSL_use_cert => 1,
                    SSL_verify_mode => 0x02,
