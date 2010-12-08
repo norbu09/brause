@@ -1,0 +1,106 @@
+<update>
+  <domain:update xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+    <domain:name>[% domain %]</domain:name>
+    [% IF add %]
+    <domain:add>
+    [% IF ns %]
+      <domain:ns>
+        [%~ FOREACH dns in ns %]
+        <domain:hostAttr>
+            <domain:hostName>[% dns %]</domain:hostName>
+            [% IF ipv4 %]
+            <domain:hostAddr ip="v4">[% ipv4 %]</domain:hostAddr>
+            [% END %]
+            [% IF ipv6 %]
+            <domain:hostAddr ip="v6">[% ipv6 %]</domain:hostAddr>
+            [% END  %]
+        </domain:hostAttr>
+       [%~ END %]
+      </domain:ns>
+    [% END %]
+    [% IF adminadd %]
+    <domain:contact type="admin">[% adminadd %]</domain:contact>
+    [% END %]
+    [% IF techadd %]
+    <domain:contact type="tech">[% techadd %]</domain:contact>
+    [% END %]
+    [% IF billingadd %]
+    <domain:contact type="billing">[% billingadd %]</domain:contact>
+    [% END %]
+    [% IF status %]
+        [%~ FOREACH sta in status %]
+        <domain:status s="[% sta %]"/>
+       [%~ END %]
+    [% END %]
+    </domain:add>
+    [% END %]
+    [% IF rem %]
+    <domain:rem>
+    [% IF status %]
+        [%~ FOREACH sta in status %]
+        <domain:status s="[% sta %]"/>
+       [%~ END %]
+    [% END %]
+    [% IF ns %]
+      <domain:ns>
+        [%~ FOREACH dns in ns %]
+        <domain:hostAttr>
+            <domain:hostName>[% dns %]</domain:hostName>
+            [% IF ipv4 %]
+            <domain:hostAddr ip="v4">[% ipv4 %]</domain:hostAddr>
+            [% END %]
+            [% IF ipv6 %]
+            <domain:hostAddr ip="v6">[% ipv6 %]</domain:hostAddr>
+            [% END  %]
+        </domain:hostAttr>
+       [%~ END %]
+      </domain:ns>
+    [% END %]
+    [% IF adminrem %]
+    <domain:contact type="admin">[% adminrem %]</domain:contact>
+    [% END %]
+    [% IF techrem %]
+    <domain:contact type="tech">[% techrem %]</domain:contact>
+    [% END %]
+    </domain:rem>
+    [% END %]
+    [% IF chg %]
+    <domain:chg>
+    <domain:registrant>[% owner %]</domain:registrant>
+    <domain:authInfo>
+      <domain:pw></domain:pw>
+    </domain:authInfo>
+    </domain:chg>
+    [% END %]
+  </domain:update>
+</update>
+[% IF ext %]
+<extension>
+      <secDNS:update xmlns:secDNS="urn:ietf:params:xml:ns:secDNS-1.1">
+        [%IF dnsrem %]
+        <secDNS:rem>
+            [% FOREACH keyr in keyrem %]
+            <secDNS:dsData>
+                <secDNS:keyTag>[% keyr %]</secDNS:keyTag>
+                <secDNS:alg>[% algrem %]</secDNS:alg>
+                <secDNS:digestType>[% dtrem %]</secDNS:digestType>
+                <secDNS:digest>[% digrem %]</secDNS:digest>
+            </secDNS:dsData>
+            [% END %]
+        </secDNS:rem>
+        [% END %]
+        [%IF dnsadd %]
+        <secDNS:add>
+            [% FOREACH keya in keyadd %]
+            <secDNS:dsData>
+                <secDNS:keyTag>[% keya %]</secDNS:keyTag>
+                <secDNS:alg>[% algadd %]</secDNS:alg>
+                <secDNS:digestType>[% dtadd %]</secDNS:digestType>
+                <secDNS:digest>[% digadd %]</secDNS:digest>
+            </secDNS:dsData>
+            [% END %]
+        </secDNS:add>
+        [% END %]
+      </secDNS:update>
+</extension>
+[% END %]

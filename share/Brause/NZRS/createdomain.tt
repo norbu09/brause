@@ -29,3 +29,17 @@
     </domain:authInfo>
   </domain:create>
 </create>
+[%IF dnssec  %]
+<extension>
+   <secDNS:create xmlns:secDNS="urn:ietf:params:xml:ns:secDNS-1.1">
+        [% FOREACH k in key %]
+        <secDNS:dsData>
+          <secDNS:keyTag>[% k %]</secDNS:keyTag>
+          <secDNS:alg>[% alg %]</secDNS:alg>
+          <secDNS:digestType>[% dt %]</secDNS:digestType>
+          <secDNS:digest>[% dig %]</secDNS:digest>
+        </secDNS:dsData>
+        [% END %]
+   </secDNS:create>
+</extension>
+[% END %]
